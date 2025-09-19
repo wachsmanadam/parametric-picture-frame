@@ -1,16 +1,18 @@
 use <frame_corner.scad>
 use <frame_segment.scad>
 
-FRAME_LENGTH = 158.4;
-FRAME_WIDTH = 107.6;
+// FRAME_LENGTH = 158.4;
+// FRAME_WIDTH = 107.6;
+FRAME_LENGTH = 172.4;
+FRAME_WIDTH = 121.6;
 
 N_LEN_PARTS = 2;
 N_WID_PARTS = 2;
 
-CORNER_LENGTH = 15;
-FACE_WIDTH = 6;
+CORNER_LENGTH = 20;
+FACE_WIDTH = 12;
 INNER_MARGIN_WIDTH = 2;
-THICKNESS = 4;
+THICKNESS = 8;
 CONNECTOR_LENGTH = 3;
 
 function segment_distance(dimension_length, corner_length) = dimension_length - (corner_length * 2);
@@ -18,7 +20,8 @@ function segment_distance(dimension_length, corner_length) = dimension_length - 
 inner_corner_length = calc_inner_edge(CORNER_LENGTH, FACE_WIDTH);
 max_picture_width = (INNER_MARGIN_WIDTH * 2) + segment_distance(FRAME_WIDTH, CORNER_LENGTH) + (inner_corner_length * 2);
 max_picture_length = (INNER_MARGIN_WIDTH * 2) + segment_distance(FRAME_LENGTH, CORNER_LENGTH) + (inner_corner_length * 2);
-
+echo(str("Width segment length: ", segment_distance(FRAME_WIDTH, CORNER_LENGTH) / N_WID_PARTS, " mm"));
+echo(str("Length segment length: ", segment_distance(FRAME_LENGTH, CORNER_LENGTH) / N_LEN_PARTS, " mm"));
 echo(str("Actual supported picture dimensions are: ", max_picture_length, " mm x ", max_picture_width, " mm"));
 
 module generate_frame(frame_length, 
@@ -33,12 +36,12 @@ module generate_frame(frame_length,
                           corner_inner_edge_length = calc_inner_edge(corner_length, face_width);
                           
                           // Calc actual distance to be covered by straight segments
-                          width_distance = frame_width - (corner_length * 2) + connector_length;
-                          length_distance = frame_length - (corner_length * 2) + connector_length ;
+                          // width_distance = frame_width - (corner_length * 2) + connector_length;
+                          // length_distance = frame_length - (corner_length * 2) + connector_length ;
                           
                           // Calc size of segments to cover distance given n_segments
-                          width_seg_size = width_distance / n_width_segments;
-                          length_seg_size = length_distance / n_length_segments;
+                          width_seg_size = segment_distance(frame_width, corner_length) / n_width_segments;
+                          length_seg_size = segment_distance(frame_length, corner_length) / n_length_segments;
                           
                           //echo("width seg size: ", width_seg_size);
                           //echo("length seg size: ", length_seg_size);
@@ -135,15 +138,15 @@ module generate_individual_frame_parts(
                           corner_inner_edge_length = calc_inner_edge(corner_length, face_width);
                           
                           // Calc actual distance to be covered by straight segments
-                          width_distance = frame_width - (corner_length * 2) + connector_length;
-                          length_distance = frame_length - (corner_length * 2) + connector_length ;
+                          //width_distance = frame_width - (corner_length * 2);
+                          // length_distance = frame_length - (corner_length * 2);
                           
                           // Calc size of segments to cover distance given n_segments
-                          width_seg_size = width_distance / n_width_segments;
-                          length_seg_size = length_distance / n_length_segments;
+                          width_seg_size = segment_distance(frame_width, corner_length) / n_width_segments;
+                          length_seg_size = segment_distance(frame_length, corner_length) / n_length_segments;
                           
-                          //echo("width seg size: ", width_seg_size);
-                          //echo("length seg size: ", length_seg_size);
+                          echo("width seg size: ", width_seg_size);
+                          echo("length seg size: ", length_seg_size);
                           // Gen corner
                           frame_corner(corner_length, face_width, inner_margin_width, thickness, connector_length);
                           
@@ -157,7 +160,6 @@ module generate_individual_frame_parts(
                               
                           // Gen length piece
                           translate([0, (corner_length*2)+(face_width * 2), 0])
-                          rotate([0, 0, 0])
                           frame_segment(segment_length = length_seg_size,
                               front_width = face_width, 
                               shelf_width = inner_margin_width, 
