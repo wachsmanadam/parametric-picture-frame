@@ -40,7 +40,7 @@ module frame_corner(outer_edge_length, front_width, shelf_width, thickness, conn
         }
         
         // Connector peg
-        translate([outer_edge_length,(front_width - shelf_width - male_connector_width) / 2, (thickness-connector_height)/ 2])
+        translate([outer_edge_length,(front_width - shelf_width - male_connector_width) / 2, (thickness-connector_height) * 0.8])
         cube([connector_length, male_connector_width, male_connector_height]);
         //cylinder(connector_length, connector_radius*.8, connector_radius*.8);
     }

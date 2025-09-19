@@ -18,7 +18,7 @@ module frame_segment(segment_length, front_width, shelf_width, thickness, connec
             //cylinder(connector_length, connector_radius, connector_radius);
         }
         
-        translate([segment_length, (front_width - shelf_width - male_connector_width) / 2, (thickness-connector_height)/ 2])
+        translate([segment_length, (front_width - shelf_width - male_connector_width) / 2, (thickness-connector_height) * 0.8])
         cube([connector_length, male_connector_width, male_connector_height]);
         //cylinder(connector_length, connector_width, connector_height);
     }
